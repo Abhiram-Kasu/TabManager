@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:TabManager.Helpers"
+             xmlns:models="clr-namespace:TabManager.Models"
+             x:Class="TabManager.Views.AddTabGroupPage"
+             xmlns:viewmodels="clr-namespace:TabManager.ViewModels"
+             >
+    <ContentPage.BindingContext>
+        <viewmodels:AddTabGroupViewModel/>
+    </ContentPage.BindingContext>
+    <VerticalStackLayout Margin="10">
+        <Label FontSize="Large" Margin="10">Add a Tab Group</Label>
+        <Entry Placeholder="Name" Margin="10" MinimumWidthRequest="50" Text="{Binding Name}" Completed="Entry_Completed" TextChanged="Entry_Completed">
+            
+        </Entry>
+        <Label FontSize="Medium" Margin="10">Tabs:</Label>
+        <ListView ItemsSource="{Binding Tabs}" Margin="10" >
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Tab">
+                    <ViewCell>
+                        <Grid ColumnDefinitions="2*,2*,1*,1*" >
+                            <Label VerticalOptions="Center" TextColor="White" Grid.Column="0" Text="{Binding Name,Source={x:Type models:Tab}}" />
+                            <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding Link, Source={x:Type models:Tab}}"  TextColor="Blue"
+                                TextDecorations="Underline">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <HorizontalStackLayout Grid.Column="2" Margin="10,0,0,0">
+                                <Label VerticalOptions="Center" Margin="2">Always Open: </Label>
+                                <CheckBox  Grid.Column="2" IsChecked="{Binding AlwaysOpen, Source={x:Type models:Tab}}"/>
+                            </HorizontalStackLayout>
+                            
+                            <Button Grid.Column="3" AutomationId="{Binding Id}" Clicked="Button_Clicked">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="IconFontTypes"
+                                    Glyph="{x:Static helpers:IconFont.LocationExit}"
+                                    Color="{AppThemeBinding Dark=Black, Light=White}"/>
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+        <Button Clicked="Button_Clicked_1" Margin="10">
+            <Button.ImageSource>
+                <FontImageSource FontFamily="IconFontTypes"
+                        Glyph="{x:Static helpers:IconFont.Plus}"
+                        Color="{AppThemeBinding Dark=Black, Light=White}"/>
+            </Button.ImageSource>
+        </Button>
+        <Label Margin="10" IsVisible="{Binding IsNotValid}" Text="{Binding ErrorText}" TextColor="Red"/>
+        <Button Margin="10" Text="Save" IsEnabled="{Binding IsValid}" Command="{Binding SaveCommand}"/>
+
+    </VerticalStackLayout>
+</ContentPage>
